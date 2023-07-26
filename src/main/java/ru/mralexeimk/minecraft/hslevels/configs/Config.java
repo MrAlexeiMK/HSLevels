@@ -38,7 +38,7 @@ public class Config extends AbstractConfig {
                 new ArrayList<>()).add(cmd.split(", ")[1]));
         ConfigurationSection cs = getConfigurationSection("levels");
         for(String key : cs.getKeys(false)) {
-            this.xpToUp.put(Integer.valueOf(key), getInt("levels." + key));
+            this.xpToUpByLevel.put(Integer.valueOf(key), getInt("levels." + key));
             this.maxLevel = Integer.parseInt(key);
         }
         this.pvpXpLoose = getDouble("pvp-xp-loose");
