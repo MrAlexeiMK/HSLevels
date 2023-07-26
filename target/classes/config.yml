@@ -1,0 +1,31 @@
+# Данные к базе данных
+mysql:
+  ip: localhost
+  port: 3306
+  database: db_name
+  user: root
+  password: password
+
+# Раз в сколько секунд обновлять placeholders, пытаться выдать призы, обновлять наигранное время
+update-period-seconds: 30
+
+# Раз в сколько секунд обновлять топы
+update-top-seconds: 300
+
+# Задержка в использовании команд (в секундах)
+commands-cooldown-seconds: 3
+
+# Регулярное выражение для реферального кода (https://regex101.com/)
+code-regex: "^[a-zA-Z0-9_.-]{1,20}$"
+
+# Сколько часов есть у игрока, чтобы стать рефералом (ввести /ref [код])
+become-referral-hours-max: 3
+
+# Сколько часов нужно наиграть, чтобы считаться активным рефералом
+active-referral-hours-need: 3
+
+# Сколько максимум рефералов показывать при вводе /refuser list (вверху будут самые активные)
+referrals-list-count: 10
+
+# Сколько максимум рефераторов показывать при вводе /refuser top [1/2]
+referrers-top-count: 10

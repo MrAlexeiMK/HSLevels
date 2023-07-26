@@ -1,0 +1,12 @@
+name: HSLevels
+version: '${project.version}'
+authors:
+  - MrAlexeiMK
+main: ru.mralexeimk.minecraft.hslevels.HSLevels
+softdepend:
+  - PlaceholderAPI
+api-version: 1.19
+commands:
+  level:
+    aliases:
+      - lvl

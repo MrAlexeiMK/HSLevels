@@ -1,0 +1,17 @@
+# Награды реферраторам (тем, кто создает код с помощью /refuser create [code] и раздает его)
+1: #Id награды (должно быть уникально)
+  hours: 3
+  rewards: #Можно указать сколько угодно валют
+    coins: 2000
+  commands:
+    - "eco give %player% %coins%"
+2:
+  hours: 15
+  rewards:
+    coins: 5000
+    limes: 1
+    dirt: 64
+  commands:
+    - "eco give %player% %coins%"
+    - "limes give %player% %limes%"
+    - "give %player% minecraft:diamond %dirt%"

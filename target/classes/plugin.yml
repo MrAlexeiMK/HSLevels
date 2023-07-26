@@ -1,0 +1,17 @@
+name: LimeRef
+version: '1.0.0'
+authors:
+  - MrAlexeiMK
+main: ru.mralexeimk.minecraft.limeref.LimeRef
+softdepend:
+  - LuckPerms
+  - PlaceholderAPI
+  - HolographicDisplays
+api-version: 1.16
+commands:
+  ref:
+    usage: /ref
+  refuser:
+    usage: /refuser
+  refadmin:
+    usage: /refadmin

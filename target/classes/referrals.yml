@@ -1,0 +1,19 @@
+# Награды рефераллам (тем, кто пишет /ref [code])
+1: #Id награды (должно быть уникально)
+  hours: 3
+  rewards: #Можно указать сколько угодно валют
+    coins: 50
+    limes: 5
+  commands: #%limes% и %coins% берутся из rewards.coins, rewards.limes - менять на определенные значения не нужно
+    - "limes give %player% %limes%"
+    - "eco give %player% %coins%"
+2:
+  hours: 15
+  rewards:
+    coins: 500
+    limes: 20
+    diamonds: 32
+  commands:
+    - "limes give %player% %limes%"
+    - "eco give %player% %coins%"
+    - "give %player% minecraft:diamond %diamonds%"
