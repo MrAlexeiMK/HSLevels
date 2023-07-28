@@ -24,7 +24,7 @@ public class MessageConstructor {
         this.message = message;
     }
 
-    public String getMessage() {
+    public String get() {
         colors();
         return message;
     }

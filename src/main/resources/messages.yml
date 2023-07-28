@@ -1,3 +1,7 @@
+common:
+  plus_xp: "+ %xp%xp"
+  minus_xp: "- %xp%xp"
+  xp_bar: "||||||||||||||||||||"
 help:
   level: "/level"
   level-player: "/level <player>"

@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Getter
 public class Config extends AbstractConfig {
-    private final Map<String, List<String>> upLevelCommands = new HashMap<>();
+    private final Map<Integer, List<String>> upLevelCommands = new HashMap<>();
     private final Map<Integer, Integer> xpToUpByLevel = new HashMap<>();
     private int maxLevel;
     private double pvpXpLoose;
@@ -18,7 +18,8 @@ public class Config extends AbstractConfig {
 
     public Config() {
         super("config.yml");
-        init();;
+        init();
+        ;
     }
 
     @Override
@@ -28,20 +29,21 @@ public class Config extends AbstractConfig {
     }
 
     public int getXpToUp(int level) {
-        if(level > this.maxLevel) return this.xpToUpByLevel.get(this.maxLevel);
+        if (level > this.maxLevel) return this.xpToUpByLevel.get(this.maxLevel);
         return this.xpToUpByLevel.get(level);
     }
 
     private void init() {
         List<String> commands = getStringList("up-level-commands");
-        commands.forEach(cmd -> this.upLevelCommands.getOrDefault(cmd.split(", ")[0],
+        commands.forEach(cmd -> this.upLevelCommands.getOrDefault(
+                Integer.valueOf(cmd.split(", ")[0]),
                 new ArrayList<>()).add(cmd.split(", ")[1]));
         ConfigurationSection cs = getConfigurationSection("levels");
-        for(String key : cs.getKeys(false)) {
+        for (String key : cs.getKeys(false)) {
             this.xpToUpByLevel.put(Integer.valueOf(key), getInt("levels." + key));
             this.maxLevel = Integer.parseInt(key);
         }
-        this.pvpXpLoose = getDouble("pvp-xp-loose");
-        this.pveXpLoose = getDouble("pve-xp-loose");
+        this.pvpXpLoose = Math.max(0.0, Math.min(100.0, getDouble("pvp-xp-loose")));
+        this.pveXpLoose = Math.max(0.0, Math.min(100.0, getDouble("pve-xp-loose")));
     }
 }

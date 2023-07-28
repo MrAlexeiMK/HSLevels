@@ -4,8 +4,10 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import ru.mralexeimk.minecraft.hslevels.HSLevels;
+import ru.mralexeimk.minecraft.hslevels.services.LevelService;
 
 public class PlaceholdersHook extends PlaceholderExpansion {
+    private final LevelService levelService = HSLevels.getInstance().getLevelService();
 
     public PlaceholdersHook() {
         register();
@@ -36,16 +38,16 @@ public class PlaceholdersHook extends PlaceholderExpansion {
     public String onPlaceholderRequest(Player p, String identifier) {
 
         if(identifier.contains("hslevels.level")) {
-            return "0";
+            return String.valueOf(levelService.getLevel(p));
         }
         if(identifier.contains("hslevels.xp")) {
-            return "0";
+            return String.valueOf(levelService.getExp(p));
         }
         if(identifier.contains("hslevels.xp_needed")) {
-            return "0";
+            return String.valueOf(levelService.getExpNeeded(p));
         }
         if(identifier.contains("hslevels.xp_bar")) {
-            return "||||||||";
+            return levelService.getExpBar(p);
         }
 
         return null;

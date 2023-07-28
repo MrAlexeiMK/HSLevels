@@ -3,6 +3,9 @@ package ru.mralexeimk.minecraft.hslevels.configs;
 import java.util.List;
 
 public class Message extends AbstractConfig {
+    public static String COMMON_PLUS_XP;
+    public static String COMMON_MINUS_XP;
+    public static String COMMON_XP_BAR;
     public static String HELP_LEVEL;
     public static String HELP_LEVEL_PLAYER;
     public static String HELP_ADD_LEVEL;
@@ -37,6 +40,9 @@ public class Message extends AbstractConfig {
     }
 
     public void init() {
+        COMMON_PLUS_XP = getString("common.plus_xp");
+        COMMON_MINUS_XP = getString("common.minus_xp");
+        COMMON_XP_BAR = getString("common.xp_bar");
         HELP_LEVEL = getString("help.level");
         HELP_LEVEL_PLAYER = getString("help.level-player");
         HELP_ADD_LEVEL = getString("help.add-level");

@@ -124,7 +124,7 @@ public abstract class AbstractConfig {
 
     public String getString(String path) {
         try {
-            return MessageConstructor.of(getConfig().getString(path)).getMessage();
+            return MessageConstructor.of(getConfig().getString(path)).get();
         } catch (Exception ex) {
             throw new ConfigValueException(name, path);
         }

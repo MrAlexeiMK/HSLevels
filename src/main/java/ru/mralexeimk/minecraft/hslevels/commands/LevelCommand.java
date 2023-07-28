@@ -8,20 +8,23 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import ru.mralexeimk.minecraft.hslevels.HSLevels;
 import ru.mralexeimk.minecraft.hslevels.builders.MessageConstructor;
 import ru.mralexeimk.minecraft.hslevels.configs.Message;
+import ru.mralexeimk.minecraft.hslevels.services.LevelService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class LevelCommand implements CommandExecutor {
+    private final LevelService levelService = HSLevels.getInstance().getLevelService();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
                              @NotNull String label, @NotNull String[] args) {
         if(!command.getName().equalsIgnoreCase("level")) return false;
         if(args.length == 0) {
-            if(sender instanceof ConsoleCommandSender) {
+            if(!(sender instanceof Player p)) {
                 MessageConstructor.of(Message.ONLY_FROM_PLAYER).send(sender);
                 return false;
             }
@@ -32,10 +35,10 @@ public class LevelCommand implements CommandExecutor {
 
             MessageConstructor
                     .of(Message.LEVEL_COMMAND)
-                    .replace("%level%", "0")
-                    .replace("%xp_bar%", "0")
-                    .replace("%xp%", "0")
-                    .replace("%xp_needed%", "0")
+                    .replace("%level%", String.valueOf(levelService.getLevel(p)))
+                    .replace("%xp_bar%", levelService.getExpBar(p))
+                    .replace("%xp%", String.valueOf(levelService.getExp(p)))
+                    .replace("%xp_needed%", String.valueOf(levelService.getExpNeeded(p)))
                     .send(sender);
             return true;
         }
