@@ -1,17 +1,12 @@
-name: LimeRef
+name: HSLevels
 version: '1.0.0'
 authors:
   - MrAlexeiMK
-main: ru.mralexeimk.minecraft.limeref.LimeRef
+main: ru.mralexeimk.minecraft.hslevels.HSLevels
 softdepend:
-  - LuckPerms
   - PlaceholderAPI
-  - HolographicDisplays
-api-version: 1.16
+api-version: 1.19
 commands:
-  ref:
-    usage: /ref
-  refuser:
-    usage: /refuser
-  refadmin:
-    usage: /refadmin
+  level:
+    aliases:
+      - lvl

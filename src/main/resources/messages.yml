@@ -8,9 +8,10 @@ help:
   add-level: "/level add <player> <count>"
   set-level: "/level set <player> <count>"
   add-xp: "/level addxp <player> <count>"
-  set-xp: "/level setxp <player> <count>"
+  set-xp: "/level setxp <player> <0-1>"
   take-level: "/level take <player> <count>"
   take-xp: "/level takexp <player> <count>"
+  reload: "/level reload"
 commands:
   level:
     - ""

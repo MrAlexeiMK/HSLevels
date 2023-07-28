@@ -1,31 +1,24 @@
-# Данные к базе данных
-mysql:
-  ip: localhost
-  port: 3306
-  database: db_name
-  user: root
-  password: password
+# Commands that will be executed when level is up
+# - structure: "%level%, %console/player%:%command%"
+# - 'console:cmd' - run command by console
+# - 'player:cmd' - run command by player
+up-level-commands:
+  - "5, console:give %player% minecraft:diamond_pickaxe"
+  - "10, console:say %player% has %level% level"
+  - "10, console:say %player% has %level% level!!!"
+  - "12, console:money add %player% 1000"
+  - "14, player:tell console I'm the best"
 
-# Раз в сколько секунд обновлять placeholders, пытаться выдать призы, обновлять наигранное время
-update-period-seconds: 30
+# Levels settings
+# If next levels is not specified, then it will be equals to latest
+levels:
+  1: 300
+  2: 400
+  3: 500
+  4: 350
 
-# Раз в сколько секунд обновлять топы
-update-top-seconds: 300
+# What percent of xp player (on his current level) will lose on die by another player
+pvp-xp-loose: 100.0
 
-# Задержка в использовании команд (в секундах)
-commands-cooldown-seconds: 3
-
-# Регулярное выражение для реферального кода (https://regex101.com/)
-code-regex: "^[a-zA-Z0-9_.-]{1,20}$"
-
-# Сколько часов есть у игрока, чтобы стать рефералом (ввести /ref [код])
-become-referral-hours-max: 3
-
-# Сколько часов нужно наиграть, чтобы считаться активным рефералом
-active-referral-hours-need: 3
-
-# Сколько максимум рефералов показывать при вводе /refuser list (вверху будут самые активные)
-referrals-list-count: 10
-
-# Сколько максимум рефераторов показывать при вводе /refuser top [1/2]
-referrers-top-count: 10
+# What percent of xp player (on his current level) will lose on another die reasons
+pve-xp-loose: 0.0

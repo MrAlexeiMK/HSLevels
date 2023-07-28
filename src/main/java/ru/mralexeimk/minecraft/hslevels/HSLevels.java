@@ -50,11 +50,15 @@ public final class HSLevels extends JavaPlugin {
         this.levelService = new LevelService();
 
         // Hooks register
-        if (Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null)
+        if (Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             this.placeholdersHook = new PlaceholdersHook();
+        }
 
         // Register commands
         Objects.requireNonNull(instance.getCommand("level")).setExecutor(new LevelCommand());
+
+        // Register listeners
+        Bukkit.getPluginManager().registerEvents(this.levelService, this);
 
         logService.info("Plugin enabled!");
     }

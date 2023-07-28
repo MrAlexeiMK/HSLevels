@@ -10,8 +10,8 @@ import java.util.Map;
 
 @Getter
 public class Config extends AbstractConfig {
-    private final Map<Integer, List<String>> upLevelCommands = new HashMap<>();
-    private final Map<Integer, Integer> xpToUpByLevel = new HashMap<>();
+    private Map<Integer, List<String>> upLevelCommands;
+    private Map<Integer, Integer> xpToUpByLevel;
     private int maxLevel;
     private double pvpXpLoose;
     private double pveXpLoose;
@@ -34,6 +34,9 @@ public class Config extends AbstractConfig {
     }
 
     private void init() {
+        this.upLevelCommands = new HashMap<>();
+        this.xpToUpByLevel = new HashMap<>();
+
         List<String> commands = getStringList("up-level-commands");
         commands.forEach(cmd -> this.upLevelCommands.getOrDefault(
                 Integer.valueOf(cmd.split(", ")[0]),

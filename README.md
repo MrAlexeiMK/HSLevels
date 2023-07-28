@@ -5,12 +5,13 @@ Minecraft plugin that overwrites vanilla minecraft level system.
 - <a href="https://www.spigotmc.org/resources/placeholderapi.6245/">PlaceholderAPI</a> (2.11.2)
 
 ## Commands
-- ```/level``` - display all commands (```hslevels.level```).
+- ```/level``` - display your level info (```hslevels.level```).
+- ```/level help``` - display all commands.
 - ```/level <player>``` - display player's level (```hslevels.player```).
 - ```/level add <player> <level>``` - add level to player (```hslevels.add```). 
 - ```/level set <player> <level>``` - set level to player (```hslevels.set```). 
 - ```/level addxp <player> <xp>``` - add xp to player (```hslevels.addxp```). 
-- ```/level setxp <player> <xp>``` - set xp to player (```hslevels.setxp```). 
+- ```/level setxp <player> <0-1>``` - set xp to player in percent (```hslevels.setxp```). 
 - ```/level take <player> <level>``` - take level from player (```hslevels.take```). 
 - ```/level takexp <player> <xp>``` - take xp from player (```hslevels.takexp```). 
 - ```/level reload``` - take xp from player (```hslevels.reload```). 
