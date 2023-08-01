@@ -120,7 +120,7 @@ public class LevelCommand implements CommandExecutor {
                 try {
                     if(p.getLevel() != config.getMaxLevel()) {
                         int xp = Integer.parseInt(args[2]);
-                        p.giveExp(levelService.toVanillaExp(p, xp));
+                        levelService.giveExp(p, xp);
                         levelService.alertExp(p, xp);
 
                         MessageConstructor
@@ -206,7 +206,7 @@ public class LevelCommand implements CommandExecutor {
 
                 try {
                     int xp = Math.max(0, Integer.parseInt(args[2]));
-                    p.giveExp(-levelService.toVanillaExp(p, xp));
+                    levelService.takeExp(p, xp);
                     levelService.alertExp(p, -xp);
 
                     MessageConstructor

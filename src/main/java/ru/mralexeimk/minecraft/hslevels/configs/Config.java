@@ -37,9 +37,12 @@ public class Config extends AbstractConfig {
         this.xpToUpByLevel = new HashMap<>();
 
         List<String> commands = getStringList("up-level-commands");
-        commands.forEach(cmd -> this.upLevelCommands.getOrDefault(
-                Integer.valueOf(cmd.split(", ")[0]),
-                new ArrayList<>()).add(cmd.split(", ")[1]));
+        commands.forEach(cmd -> {
+            int key = Integer.parseInt(cmd.split(", ")[0]);
+            List<String> cmds = this.upLevelCommands.getOrDefault(key, new ArrayList<>());
+            cmds.add(cmd.split(", ")[1]);
+            this.upLevelCommands.put(key, cmds);
+        });
         ConfigurationSection cs = getConfigurationSection("levels");
         for (String key : cs.getKeys(false)) {
             this.xpToUpByLevel.put(Integer.valueOf(key), getInt("levels." + key));

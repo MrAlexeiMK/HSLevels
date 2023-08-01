@@ -64,28 +64,33 @@ public class LevelService implements Listener {
             p.setExp(0f);
             return;
         }
-        if(getExp(p) + amount > config.getXpToUp(p.getLevel() + 1)) {
-            p.giveExpLevels(1);
+
+        int lvlRequiredExp = config.getXpToUp(p.getLevel() + 1);
+        int exp = getExp(p);
+        if(exp + amount > lvlRequiredExp) {
+            p.setExp(0);
+            p.setLevel(p.getLevel() + 1);
+            giveExp(p, exp + amount - lvlRequiredExp);
+        }
+        else {
+            p.setExp(Math.max(0, Math.min(1, p.getExp() +
+                    (float) amount / config.getXpToUp(p.getLevel() + 1))));
         }
     }
 
-    public void alertExpByVanilla(Player p, int amount) {
-        int neededExp = config.getXpToUp(p.getLevel() + 1);
-        int neededExpVanilla = getVanillaExpToUp(p.getLevel() + 1);
-        int predAmount = amount;
-
-        amount = Math.max(predAmount > 0 ? 1 : 0, (neededExpVanilla * amount) / neededExp);
-
-        logService.debug("exp custom change: " + amount + "/" + neededExpVanilla + ", " +
-                predAmount + "/" + neededExp);
-
-        if (amount == 0) return;
-
-        p.sendActionBar(Component.text(MessageConstructor
-                .of(Message.COMMON_PLUS_XP)
-                .replace("%xp%", String.valueOf(amount))
-                .get()
-        ));
+    public void takeExp(Player p, int amount) {
+        if(amount > getExp(p)) {
+            p.setExp(0);
+            if(p.getLevel() != 0) {
+                p.setLevel(p.getLevel() - 1);
+                p.setExp(1);
+                takeExp(p, amount - getExp(p));
+            }
+        }
+        else {
+            p.setExp(Math.max(0, Math.min(1, p.getExp() -
+                    (float) amount / config.getXpToUp(p.getLevel() + 1))));
+        }
     }
 
     public void alertExp(Player p, int amount) {
@@ -108,6 +113,7 @@ public class LevelService implements Listener {
     /**
      * x/neededExpVanilla = amount/neededExp => x = (neededExpVanilla * amount)/neededExp
      */
+    @Deprecated
     public int toVanillaExp(Player p, int amount) {
         int neededExp = config.getXpToUp(p.getLevel() + 1);
         int neededExpVanilla = getVanillaExpToUp(p.getLevel() + 1);
@@ -117,31 +123,29 @@ public class LevelService implements Listener {
     @EventHandler
     public void onExpChange(PlayerExpChangeEvent e) {
         Player p = e.getPlayer();
+        int amount = e.getAmount();
+        if(amount <= 0) return;
+        e.setAmount(0);
 
         if(p.getLevel() > config.getMaxLevel()) {
             p.setLevel(config.getMaxLevel());
             p.setExp(0f);
             return;
         }
-        if(p.getLevel() == config.getMaxLevel()) {
-            if(p.getExp() > 0f) p.setExp(0f);
-            e.setAmount(0);
+        if(p.getLevel() == config.getMaxLevel() && p.getExp() > 0f) {
+            p.setExp(0f);
             return;
         }
+
         int neededExp = config.getXpToUp(p.getLevel() + 1);
-        int neededExpVanilla = getVanillaExpToUp(p.getLevel() + 1);
-        int predAmount = e.getAmount();
+        if(neededExp == 0) return;
 
-        e.setAmount(Math.max(predAmount > 0 ? 1 : 0, (neededExpVanilla * e.getAmount()) / neededExp));
-
-        logService.debug("exp vanilla change: " + e.getAmount() + "/" + neededExpVanilla + ", " +
-                predAmount + "/" + neededExp);
-
-        if (e.getAmount() == 0) return;
+        p.setExp(Math.min(1, p.getExp() + (float) amount / neededExp));
+        if(p.getExp() == 1f) p.giveExp(1);
 
         p.sendActionBar(Component.text(MessageConstructor
                 .of(Message.COMMON_PLUS_XP)
-                .replace("%xp%", String.valueOf(e.getAmount()))
+                .replace("%xp%", String.valueOf(amount))
                 .get()
         ));
     }
@@ -149,13 +153,14 @@ public class LevelService implements Listener {
     @EventHandler
     public void onLvlUp(PlayerLevelChangeEvent e) {
         Player p = e.getPlayer();
-        logService.debug("level change: " + e.getOldLevel() + " -> " + e.getNewLevel());
         if (e.getNewLevel() <= e.getOldLevel()) return;
 
         for (int lvl = e.getOldLevel(); lvl <= e.getNewLevel(); ++lvl) {
             for (String cmdDesk : config.getUpLevelCommands().getOrDefault(lvl, new ArrayList<>())) {
                 String byWho = cmdDesk.split(":")[0];
-                String cmd = cmdDesk.split(":")[1];
+                String cmd = cmdDesk.split(":")[1]
+                        .replace("%player%", p.getName())
+                        .replace("%level%", String.valueOf(getLevel(p)));
 
                 if (byWho.equalsIgnoreCase("console")) {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
@@ -175,12 +180,24 @@ public class LevelService implements Listener {
         if (p.getKiller() == null) {
             p.setExp(p.getExp() * (1f - (float) (config.getPveXpLoose() / 100)));
         } else {
-            float oldExp = p.getExp();
+            int oldExp = getExp(p);
             p.setExp(p.getExp() * (1f - (float) (config.getPvpXpLoose() / 100)));
 
-            int xp = (int) ((oldExp - p.getExp()) * getVanillaExpToUp(p.getLevel() + 1));
-            p.getKiller().giveExp(xp);
-            alertExpByVanilla(p.getKiller(), xp);
+            int xp = Math.max(0, oldExp - getExp(p));
+            giveExp(p.getKiller(), xp);
+
+            if(xp == 0) return;
+            p.sendActionBar(Component.text(MessageConstructor
+                    .of(Message.COMMON_MINUS_XP)
+                    .replace("%xp%", String.valueOf(xp))
+                    .get()
+            ));
+
+            p.getKiller().sendActionBar(Component.text(MessageConstructor
+                    .of(Message.COMMON_PLUS_XP)
+                    .replace("%xp%", String.valueOf(xp))
+                    .get()
+            ));
         }
     }
 }

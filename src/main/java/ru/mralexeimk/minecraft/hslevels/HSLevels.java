@@ -32,10 +32,6 @@ public final class HSLevels extends JavaPlugin {
     @Getter
     private LevelService levelService;
 
-    // Hooks
-    @Getter
-    private PlaceholdersHook placeholdersHook;
-
     @Override
     @SneakyThrows
     public void onEnable() {
@@ -50,8 +46,8 @@ public final class HSLevels extends JavaPlugin {
         this.levelService = new LevelService();
 
         // Hooks register
-        if (Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            this.placeholdersHook = new PlaceholdersHook();
+        if (Bukkit.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            new PlaceholdersHook().register();
         }
 
         // Register commands

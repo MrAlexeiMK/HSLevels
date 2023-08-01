@@ -10,15 +10,20 @@ up-level-commands:
   - "14, player:tell console I'm the best"
 
 # Levels settings
-# If next levels is not specified, then it will be equals to latest
 levels:
   1: 300
   2: 400
-  3: 500
-  4: 350
+  3: 600
+  4: 800
+  5: 1500
+  6: 3000
+  7: 10000
+  8: 20000
+  9: 30000
+  10: 50000
 
 # What percent of xp player (on his current level) will lose on die by another player
 pvp-xp-loose: 100.0
 
 # What percent of xp player (on his current level) will lose on another die reasons
-pve-xp-loose: 0.0
+pve-xp-loose: 20.0

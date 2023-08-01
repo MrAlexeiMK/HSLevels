@@ -9,10 +9,6 @@ import ru.mralexeimk.minecraft.hslevels.services.LevelService;
 public class PlaceholdersHook extends PlaceholderExpansion {
     private final LevelService levelService = HSLevels.getInstance().getLevelService();
 
-    public PlaceholdersHook() {
-        register();
-    }
-
     @Override
     public @NotNull String getIdentifier() {
         return "hslevels";
@@ -37,16 +33,16 @@ public class PlaceholdersHook extends PlaceholderExpansion {
     @Override
     public String onPlaceholderRequest(Player p, String identifier) {
 
-        if(identifier.contains("hslevels.level")) {
+        if (identifier.equals("level")) {
             return String.valueOf(levelService.getLevel(p));
         }
-        if(identifier.contains("hslevels.xp")) {
+        if (identifier.equals("xp")) {
             return String.valueOf(levelService.getExp(p));
         }
-        if(identifier.contains("hslevels.xp_needed")) {
+        if (identifier.equals("xp_needed")) {
             return String.valueOf(levelService.getExpNeeded(p));
         }
-        if(identifier.contains("hslevels.xp_bar")) {
+        if (identifier.equals("xp_bar")) {
             return levelService.getExpBar(p);
         }
 

@@ -17,7 +17,7 @@ Minecraft plugin that overwrites vanilla minecraft level system.
 - ```/level reload``` - take xp from player (```hslevels.reload```). 
 
 ## Placeholders
-- ```hslevels.level``` - display level of player.
-- ```hslevels.xp``` - display current xp of player.
-- ```hslevels.xp_needed``` - display needed xp to up of player.
-- ```hslevels.xp_bar``` - display colored xp bar.
+- ```hslevels_level``` - display level of player.
+- ```hslevels_xp``` - display current xp of player.
+- ```hslevels_xp_needed``` - display needed xp to up of player.
+- ```hslevels_xp_bar``` - display colored xp bar.
