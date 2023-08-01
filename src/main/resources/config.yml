@@ -10,7 +10,6 @@ up-level-commands:
   - "14, player:tell console I'm the best"
 
 # Levels settings
-# If next levels is not specified, then it will be equals to latest
 levels:
   1: 300
   2: 400

@@ -8,11 +8,13 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import ru.mralexeimk.minecraft.hslevels.HSLevels;
 import ru.mralexeimk.minecraft.hslevels.builders.MessageConstructor;
+import ru.mralexeimk.minecraft.hslevels.configs.Config;
 import ru.mralexeimk.minecraft.hslevels.configs.Message;
 import ru.mralexeimk.minecraft.hslevels.services.LevelService;
 
 public class LevelCommand implements CommandExecutor {
     private final LevelService levelService = HSLevels.getInstance().getLevelService();
+    private final Config config = HSLevels.getInstance().config();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
@@ -52,13 +54,25 @@ public class LevelCommand implements CommandExecutor {
                 if (p == null) return false;
 
                 try {
-                    int level = Integer.parseInt(args[2]);
-                    p.giveExpLevels(level);
+                    int oldLevel = p.getLevel();
+                    int levels = Math.max(0, Integer.parseInt(args[2]));
+
+                    levelService.giveLevels(p, levels);
+                    int sumExp = 0;
+                    for (int level = oldLevel + 1; level <= p.getLevel(); ++level) {
+                        sumExp += config.getXpToUp(level);
+                    }
+
+                    levelService.alertExp(p, sumExp);
+
                     MessageConstructor
                             .of(Message.ADD_LEVEL_COMMAND)
-                            .replace("%level%", String.valueOf(level))
+                            .replace("%level%", String.valueOf(levels))
                             .replace("%player%", sender.getName())
                             .send(p);
+                    MessageConstructor
+                            .of(Message.SUCCESS)
+                            .send(sender);
                 } catch (Exception ex) {
                     printHelp(sender);
                     return false;
@@ -76,13 +90,17 @@ public class LevelCommand implements CommandExecutor {
                 if (p == null) return false;
 
                 try {
-                    int level = Integer.parseInt(args[2]);
+                    int level = Math.min(config.getMaxLevel(), Math.max(0, Integer.parseInt(args[2])));
                     p.setLevel(level);
+
                     MessageConstructor
                             .of(Message.SET_LEVEL_COMMAND)
                             .replace("%level%", String.valueOf(level))
                             .replace("%player%", sender.getName())
                             .send(p);
+                    MessageConstructor
+                            .of(Message.SUCCESS)
+                            .send(sender);
                 } catch (Exception ex) {
                     printHelp(sender);
                     return false;
@@ -100,13 +118,20 @@ public class LevelCommand implements CommandExecutor {
                 if (p == null) return false;
 
                 try {
-                    int xp = Integer.parseInt(args[2]);
-                    p.giveExp(xp);
+                    if(p.getLevel() != config.getMaxLevel()) {
+                        int xp = Integer.parseInt(args[2]);
+                        p.giveExp(levelService.toVanillaExp(p, xp));
+                        levelService.alertExp(p, xp);
+
+                        MessageConstructor
+                                .of(Message.ADD_XP_COMMAND)
+                                .replace("%xp%", String.valueOf(xp))
+                                .replace("%player%", sender.getName())
+                                .send(p);
+                    }
                     MessageConstructor
-                            .of(Message.ADD_XP_COMMAND)
-                            .replace("%xp%", String.valueOf(xp))
-                            .replace("%player%", sender.getName())
-                            .send(p);
+                            .of(Message.SUCCESS)
+                            .send(sender);
                 } catch (Exception ex) {
                     printHelp(sender);
                     return false;
@@ -124,13 +149,17 @@ public class LevelCommand implements CommandExecutor {
                 if (p == null) return false;
 
                 try {
-                    float xp = Float.parseFloat(args[2]);
+                    float xp = Math.min(1, Math.max(0, Float.parseFloat(args[2])));
                     p.setExp(xp);
+
                     MessageConstructor
                             .of(Message.SET_XP_COMMAND)
                             .replace("%xp%", String.valueOf(xp))
                             .replace("%player%", sender.getName())
                             .send(p);
+                    MessageConstructor
+                            .of(Message.SUCCESS)
+                            .send(sender);
                 } catch (Exception ex) {
                     printHelp(sender);
                     return false;
@@ -148,13 +177,17 @@ public class LevelCommand implements CommandExecutor {
                 if (p == null) return false;
 
                 try {
-                    int level = Integer.parseInt(args[2]);
+                    int level = Math.min(p.getLevel(), Math.max(0, Integer.parseInt(args[2])));
                     p.giveExpLevels(-level);
+
                     MessageConstructor
                             .of(Message.TAKE_LEVEL_COMMAND)
                             .replace("%level%", String.valueOf(level))
                             .replace("%player%", sender.getName())
                             .send(p);
+                    MessageConstructor
+                            .of(Message.SUCCESS)
+                            .send(sender);
                 } catch (Exception ex) {
                     printHelp(sender);
                     return false;
@@ -172,21 +205,25 @@ public class LevelCommand implements CommandExecutor {
                 if (p == null) return false;
 
                 try {
-                    int xp = Integer.parseInt(args[2]);
-                    p.giveExp(-xp);
+                    int xp = Math.max(0, Integer.parseInt(args[2]));
+                    p.giveExp(-levelService.toVanillaExp(p, xp));
+                    levelService.alertExp(p, -xp);
 
                     MessageConstructor
                             .of(Message.TAKE_XP_COMMAND)
                             .replace("%xp%", String.valueOf(xp))
                             .replace("%player%", sender.getName())
                             .send(p);
+                    MessageConstructor
+                            .of(Message.SUCCESS)
+                            .send(sender);
                 } catch (Exception ex) {
                     printHelp(sender);
                     return false;
                 }
             }
             case "reload" -> {
-                if(!sender.hasPermission("hslevels.reload")) {
+                if (!sender.hasPermission("hslevels.reload")) {
                     MessageConstructor
                             .of(Message.NO_PEX)
                             .send(sender);

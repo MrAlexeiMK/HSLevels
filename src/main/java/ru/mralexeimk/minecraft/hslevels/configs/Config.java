@@ -19,7 +19,6 @@ public class Config extends AbstractConfig {
     public Config() {
         super("config.yml");
         init();
-        ;
     }
 
     @Override
@@ -29,7 +28,7 @@ public class Config extends AbstractConfig {
     }
 
     public int getXpToUp(int level) {
-        if (level > this.maxLevel) return this.xpToUpByLevel.get(this.maxLevel);
+        if (level > this.maxLevel) return 0;
         return this.xpToUpByLevel.get(level);
     }
 
