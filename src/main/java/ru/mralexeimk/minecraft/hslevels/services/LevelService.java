@@ -48,18 +48,18 @@ public class LevelService implements Listener {
     }
 
     public void giveLevels(Player p, int levels) {
-        if(p.getLevel() > config.getMaxLevel()) {
+        if (p.getLevel() > config.getMaxLevel()) {
             p.setLevel(config.getMaxLevel());
             p.setExp(0f);
             return;
         }
         p.giveExpLevels(p.getLevel() + levels > config.getMaxLevel() ?
                 config.getMaxLevel() - p.getLevel() : levels);
-        if(p.getLevel() == config.getMaxLevel()) p.setExp(0f);
+        if (p.getLevel() == config.getMaxLevel()) p.setExp(0f);
     }
 
     public void giveExp(Player p, int amount) {
-        if(p.getLevel() >= config.getMaxLevel()) {
+        if (p.getLevel() >= config.getMaxLevel()) {
             p.setLevel(config.getMaxLevel());
             p.setExp(0f);
             return;
@@ -67,41 +67,38 @@ public class LevelService implements Listener {
 
         int lvlRequiredExp = config.getXpToUp(p.getLevel() + 1);
         int exp = getExp(p);
-        if(exp + amount > lvlRequiredExp) {
+        if (exp + amount > lvlRequiredExp) {
             p.setExp(0);
             p.setLevel(p.getLevel() + 1);
             giveExp(p, exp + amount - lvlRequiredExp);
-        }
-        else {
+        } else {
             p.setExp(Math.max(0, Math.min(1, p.getExp() +
                     (float) amount / config.getXpToUp(p.getLevel() + 1))));
         }
     }
 
     public void takeExp(Player p, int amount) {
-        if(amount > getExp(p)) {
+        if (amount > getExp(p)) {
             p.setExp(0);
-            if(p.getLevel() != 0) {
+            if (p.getLevel() != 0) {
                 p.setLevel(p.getLevel() - 1);
                 p.setExp(1);
                 takeExp(p, amount - getExp(p));
             }
-        }
-        else {
+        } else {
             p.setExp(Math.max(0, Math.min(1, p.getExp() -
                     (float) amount / config.getXpToUp(p.getLevel() + 1))));
         }
     }
 
     public void alertExp(Player p, int amount) {
-        if(amount > 0) {
+        if (amount > 0) {
             p.sendActionBar(Component.text(MessageConstructor
                     .of(Message.COMMON_PLUS_XP)
                     .replace("%xp%", String.valueOf(amount))
                     .get()
             ));
-        }
-        else if(amount < 0) {
+        } else if (amount < 0) {
             p.sendActionBar(Component.text(MessageConstructor
                     .of(Message.COMMON_MINUS_XP)
                     .replace("%xp%", String.valueOf(-amount))
@@ -124,24 +121,20 @@ public class LevelService implements Listener {
     public void onExpChange(PlayerExpChangeEvent e) {
         Player p = e.getPlayer();
         int amount = e.getAmount();
-        if(amount <= 0) return;
+        if (amount <= 0) return;
         e.setAmount(0);
 
-        if(p.getLevel() > config.getMaxLevel()) {
+        if (p.getLevel() > config.getMaxLevel()) {
             p.setLevel(config.getMaxLevel());
             p.setExp(0f);
             return;
         }
-        if(p.getLevel() == config.getMaxLevel() && p.getExp() > 0f) {
+        if (p.getLevel() == config.getMaxLevel() && p.getExp() > 0f) {
             p.setExp(0f);
             return;
         }
 
-        int neededExp = config.getXpToUp(p.getLevel() + 1);
-        if(neededExp == 0) return;
-
-        p.setExp(Math.min(1, p.getExp() + (float) amount / neededExp));
-        if(p.getExp() == 1f) p.giveExp(1);
+        giveExp(p, amount);
 
         p.sendActionBar(Component.text(MessageConstructor
                 .of(Message.COMMON_PLUS_XP)
@@ -186,18 +179,28 @@ public class LevelService implements Listener {
             int xp = Math.max(0, oldExp - getExp(p));
             giveExp(p.getKiller(), xp);
 
-            if(xp == 0) return;
+            if (xp == 0) return;
             p.sendActionBar(Component.text(MessageConstructor
                     .of(Message.COMMON_MINUS_XP)
                     .replace("%xp%", String.valueOf(xp))
                     .get()
             ));
+            MessageConstructor
+                    .of(Message.COMMON_PVP_DEATH)
+                    .replace("%player", p.getKiller().getName())
+                    .replace("%xp%", String.valueOf(xp))
+                    .send(p);
 
             p.getKiller().sendActionBar(Component.text(MessageConstructor
                     .of(Message.COMMON_PLUS_XP)
                     .replace("%xp%", String.valueOf(xp))
                     .get()
             ));
+            MessageConstructor
+                    .of(Message.COMMON_PVP_KILL)
+                    .replace("%player", p.getName())
+                    .replace("%xp%", String.valueOf(xp))
+                    .send(p.getKiller());
         }
     }
 }

@@ -6,6 +6,8 @@ public class Message extends AbstractConfig {
     public static String COMMON_PLUS_XP;
     public static String COMMON_MINUS_XP;
     public static String COMMON_XP_BAR;
+    public static String COMMON_PVP_KILL;
+    public static String COMMON_PVP_DEATH;
     public static String HELP_LEVEL;
     public static String HELP_LEVEL_PLAYER;
     public static String HELP_ADD_LEVEL;
@@ -43,6 +45,8 @@ public class Message extends AbstractConfig {
         COMMON_PLUS_XP = getString("common.plus_xp");
         COMMON_MINUS_XP = getString("common.minus_xp");
         COMMON_XP_BAR = getString("common.xp_bar");
+        COMMON_PVP_KILL = getString("common.pvp_kill");
+        COMMON_PVP_DEATH = getString("common.pvp_death");
         HELP_LEVEL = getString("help.level");
         HELP_LEVEL_PLAYER = getString("help.level-player");
         HELP_ADD_LEVEL = getString("help.add-level");

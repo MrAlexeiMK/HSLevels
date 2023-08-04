@@ -2,6 +2,16 @@ common:
   plus_xp: "+ %xp%xp"
   minus_xp: "- %xp%xp"
   xp_bar: "||||||||||||||||||||"
+  pvp_kill:
+    - ''
+    - 'Вы убили игрока %player% и получили'
+    - 'за это %xp% опыта'
+    - ''
+  pvp_death:
+    - ''
+    - 'Вы были убиты игроком %player% и '
+    - 'потеряли %xp% опыта, теперь у вас'
+    - ''
 help:
   level: "/level"
   level-player: "/level <player>"

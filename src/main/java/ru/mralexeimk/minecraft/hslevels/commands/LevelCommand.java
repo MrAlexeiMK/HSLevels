@@ -232,6 +232,8 @@ public class LevelCommand implements CommandExecutor {
 
                 HSLevels.getInstance().config().reloadConfig();
                 HSLevels.getInstance().getMessage().reloadConfig();
+                HSLevels.getInstance().config().saveConfig();
+                HSLevels.getInstance().getMessage().saveConfig();
 
                 MessageConstructor
                         .of(Message.SUCCESS)
