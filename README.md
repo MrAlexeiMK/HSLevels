@@ -14,7 +14,7 @@ Minecraft plugin that overwrites vanilla minecraft level system.
 - ```/level setxp <player> <0-1>``` - set xp to player in percent (```hslevels.setxp```). 
 - ```/level take <player> <level>``` - take level from player (```hslevels.take```). 
 - ```/level takexp <player> <xp>``` - take xp from player (```hslevels.takexp```). 
-- ```/level reload``` - take xp from player (```hslevels.reload```). 
+- ```/level reload``` - reload (```hslevels.reload```). 
 
 ## Placeholders
 - ```hslevels_level``` - display level of player.
